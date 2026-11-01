@@ -1,0 +1,296 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Meus Atalhos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+  /* Layout: coluna única centralizada, grade de blocos de atalho, painel de cadastro no fim. */
+  :root {
+    --bg: #f3f5f8;
+    --surface: #ffffff;
+    --fg: #14202e;
+    --muted: #5b6b7d;
+    --line: #dbe2ea;
+    --accent: #1f5fd6;
+    --accent-fg: #ffffff;
+    --danger: #c62828;
+    --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1620; --surface: #18222f; --fg: #e8eef5; --muted: #93a3b5;
+      --line: #2a3646; --accent: #6ea1ff; --accent-fg: #0b1220; --danger: #ff7b72;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1620; --surface: #18222f; --fg: #e8eef5; --muted: #93a3b5;
+    --line: #2a3646; --accent: #6ea1ff; --accent-fg: #0b1220; --danger: #ff7b72;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.45;
+    padding-block: 28px 40px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 760px; margin: 0 auto; display: grid; gap: 20px; }
+
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  h1 { font-family: var(--font-display); font-weight: 700; font-size: 2rem; line-height: 1.1; margin: 0; text-wrap: balance; }
+  .count { color: var(--muted); font-size: .9rem; margin: 4px 0 0; font-variant-numeric: tabular-nums; }
+
+  button, input { font: inherit; color: inherit; }
+  .btn {
+    border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+    border-radius: 10px; padding: 9px 16px; font-weight: 600; cursor: pointer; min-height: 40px;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+  .btn[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  .search {
+    width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 10px;
+    padding: 11px 14px; min-height: 44px;
+  }
+  .search::placeholder, .field input::placeholder { color: var(--muted); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 12px; }
+  .tile { position: relative; }
+  .tile a {
+    display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 16px 8px 12px; color: inherit; text-decoration: none; min-width: 0; height: 100%;
+    transition: transform .12s ease, border-color .12s ease;
+  }
+  .tile a:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .ico {
+    width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+    color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 1.5rem;
+  }
+  .nm { font-weight: 600; font-size: .92rem; line-height: 1.2; max-width: 100%; overflow-wrap: anywhere;
+        display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .host { color: var(--muted); font-size: .72rem; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rm {
+    display: none; position: absolute; top: -8px; right: -8px; width: 30px; height: 30px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--surface); color: var(--danger);
+    font-size: 1.1rem; line-height: 1; cursor: pointer; place-items: center; padding: 0;
+  }
+  .editing .rm { display: grid; }
+  .editing .tile a { pointer-events: none; border-style: dashed; }
+
+  .empty { grid-column: 1 / -1; background: var(--surface); border: 1px dashed var(--line); border-radius: 14px;
+           padding: 28px 16px; text-align: center; color: var(--muted); }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 14px; }
+  .panel h2 { font-family: var(--font-display); font-size: 1.15rem; margin: 0; }
+  form { display: grid; grid-template-columns: 1fr 1.5fr auto; gap: 10px; align-items: end; }
+  .field { display: grid; gap: 4px; min-width: 0; }
+  .field label { font-size: .78rem; font-weight: 600; color: var(--muted); letter-spacing: .03em; text-transform: uppercase; }
+  .field input { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 10px 12px; min-height: 44px; }
+  .msg { min-height: 1.2em; margin: 0; font-size: .88rem; color: var(--danger); }
+  @media (max-width: 560px) { form { grid-template-columns: 1fr; } }
+
+  .tip { color: var(--muted); font-size: .88rem; margin: 0; }
+  .tip b { color: var(--fg); }
+  .tools { display: none; gap: 10px; flex-wrap: wrap; }
+  .editing + .tools, .tools.show { display: flex; }
+
+  .toast {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    background: var(--fg); color: var(--bg); border-radius: 12px; padding: 10px 14px; display: flex; gap: 14px; align-items: center;
+    max-width: calc(100% - 32px); box-shadow: 0 6px 24px rgba(0,0,0,.25);
+  }
+  .toast button { background: none; border: 0; color: var(--bg); font-weight: 700; text-decoration: underline; cursor: pointer; padding: 4px; }
+  @media (prefers-reduced-motion: reduce) { .tile a { transition: none; } .tile a:hover { transform: none; } }
+</style>
+
+<main>
+  <header>
+    <div>
+      <h1>Meus atalhos</h1>
+      <p class="count" id="count"></p>
+    </div>
+    <button class="btn" id="editBtn" type="button" aria-pressed="false">Editar</button>
+  </header>
+
+  <input class="search" id="search" type="search" placeholder="Buscar atalho" aria-label="Buscar atalho" autocomplete="off">
+
+  <section class="grid" id="grid" aria-label="Atalhos"></section>
+
+  <div class="tools" id="tools">
+    <button class="btn" id="resetBtn" type="button">Restaurar exemplos</button>
+  </div>
+
+  <section class="panel" aria-labelledby="addTitle">
+    <h2 id="addTitle">Adicionar atalho</h2>
+    <form id="addForm" novalidate>
+      <div class="field">
+        <label for="nameIn">Nome</label>
+        <input id="nameIn" type="text" placeholder="Notícias" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="urlIn">Endereço do site</label>
+        <input id="urlIn" type="url" inputmode="url" placeholder="g1.globo.com" autocomplete="off" autocapitalize="off">
+      </div>
+      <button class="btn primary" type="submit">Adicionar</button>
+    </form>
+    <p class="msg" id="msg" role="alert"></p>
+  </section>
+
+  <p class="tip">
+    Para abrir como um app: no menu do navegador do celular, escolha <b>Adicionar à tela inicial</b>.
+    Os atalhos ficam salvos neste navegador. Esta página abre sites; para abrir apps instalados, use o APK.
+  </p>
+</main>
+
+<div class="toast" id="toast" hidden>
+  <span id="toastText"></span>
+  <button type="button" id="undoBtn">Desfazer</button>
+</div>
+
+<script>
+  var KEY = "atalhos.v1";
+  var DEFAULTS = [
+    { name: "Google", url: "https://www.google.com" },
+    { name: "YouTube", url: "https://www.youtube.com" },
+    { name: "Gmail", url: "https://mail.google.com" },
+    { name: "Maps", url: "https://maps.google.com" },
+    { name: "WhatsApp Web", url: "https://web.whatsapp.com" },
+    { name: "Wikipédia", url: "https://pt.wikipedia.org" },
+    { name: "G1", url: "https://g1.globo.com" }
+  ];
+
+  var items = load();
+  var editing = false;
+  var query = "";
+  var lastRemoved = null;
+  var toastTimer = null;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $("grid"), main = document.querySelector("main");
+
+  function clone(list) { return list.map(function (x) { return { name: x.name, url: x.url }; }); }
+
+  function load() {
+    try {
+      var s = localStorage.getItem(KEY);
+      if (s) { var a = JSON.parse(s); if (Array.isArray(a)) return a; }
+    } catch (e) {}
+    return clone(DEFAULTS);
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) {} }
+
+  function normUrl(u) {
+    u = u.trim();
+    if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(u)) u = "https://" + u;
+    return u;
+  }
+  function parse(u) { try { var x = new URL(u); return (x.protocol === "https:" || x.protocol === "http:") && x.hostname.indexOf(".") > 0 ? x : null; } catch (e) { return null; } }
+  function hostOf(u) { var x = parse(u); return x ? x.hostname.replace(/^www\./, "") : u; }
+  function hue(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h; }
+
+  function render() {
+    grid.replaceChildren();
+    var q = query.trim().toLowerCase();
+    var shown = 0;
+    items.forEach(function (it, idx) {
+      var host = hostOf(it.url);
+      if (q && it.name.toLowerCase().indexOf(q) < 0 && host.toLowerCase().indexOf(q) < 0) return;
+      shown++;
+
+      var tile = document.createElement("div"); tile.className = "tile";
+      var a = document.createElement("a");
+      a.href = it.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+      var ico = document.createElement("span"); ico.className = "ico";
+      ico.style.background = "hsl(" + hue(it.name) + ", 55%, 40%)";
+      ico.textContent = (it.name.trim().charAt(0) || "?").toUpperCase();
+      var nm = document.createElement("span"); nm.className = "nm"; nm.textContent = it.name;
+      var hs = document.createElement("span"); hs.className = "host"; hs.textContent = host;
+      a.append(ico, nm, hs);
+
+      var rm = document.createElement("button");
+      rm.type = "button"; rm.className = "rm"; rm.textContent = "×";
+      rm.setAttribute("aria-label", "Remover " + it.name);
+      rm.addEventListener("click", function () { removeAt(idx); });
+
+      tile.append(a, rm);
+      grid.appendChild(tile);
+    });
+
+    if (!shown) {
+      var e = document.createElement("div"); e.className = "empty";
+      e.textContent = items.length ? "Nenhum atalho com esse nome." : "Nenhum atalho ainda. Adicione o primeiro abaixo.";
+      grid.appendChild(e);
+    }
+    var n = items.length;
+    $("count").textContent = n + (n === 1 ? " atalho" : " atalhos");
+    grid.classList.toggle("editing", editing);
+    $("tools").classList.toggle("show", editing);
+  }
+
+  function removeAt(idx) {
+    lastRemoved = { item: items[idx], index: idx };
+    items.splice(idx, 1);
+    save(); render();
+    showToast(lastRemoved.item.name + " removido");
+  }
+
+  function showToast(text) {
+    $("toastText").textContent = text;
+    $("toast").hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { $("toast").hidden = true; lastRemoved = null; }, 6000);
+  }
+
+  $("undoBtn").addEventListener("click", function () {
+    if (!lastRemoved) return;
+    items.splice(lastRemoved.index, 0, lastRemoved.item);
+    lastRemoved = null; $("toast").hidden = true;
+    save(); render();
+  });
+
+  $("editBtn").addEventListener("click", function () {
+    editing = !editing;
+    this.setAttribute("aria-pressed", String(editing));
+    this.textContent = editing ? "Concluir" : "Editar";
+    render();
+  });
+
+  $("search").addEventListener("input", function () { query = this.value; render(); });
+
+  $("resetBtn").addEventListener("click", function () {
+    items = clone(DEFAULTS); save(); render();
+    showToast("Exemplos restaurados");
+    lastRemoved = null;
+  });
+
+  $("addForm").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var name = $("nameIn").value.trim();
+    var raw = $("urlIn").value;
+    var msg = $("msg");
+    if (!raw.trim()) { msg.textContent = "Digite o endereço do site."; $("urlIn").focus(); return; }
+    var url = normUrl(raw);
+    if (!parse(url)) { msg.textContent = "Endereço inválido. Exemplo: g1.globo.com"; $("urlIn").focus(); return; }
+    if (!name) name = hostOf(url);
+    items.push({ name: name, url: url });
+    save(); render();
+    msg.textContent = "";
+    $("nameIn").value = ""; $("urlIn").value = "";
+    $("nameIn").focus();
+  });
+
+  render();
+</script>
+
+</body></html>
